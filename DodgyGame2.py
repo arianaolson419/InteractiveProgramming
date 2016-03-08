@@ -32,37 +32,39 @@ class View(object):
         self.model = model
         self.screen = pygame.display.set_mode(size)
         self.end = pygame.image.load('gameover.png')
-        self.eyes = pygame.image.load('eyes.png')
-        self.ostrich = pygame.image.load('ostrich.png')
+        self.eyes = pygame.transform.scale(pygame.image.load('eyes.png'), (self.model.user.radius, self.model.user.radius))
+        self.ostrich = pygame.transform.scale(pygame.image.load('ostrich.png'), (self.model.bird.radius, self.model.bird.radius))
+
 
 
     def draw(self):
         """ Draw the game to the pygame window """
         self.screen.fill(pygame.Color(135, 206, 250))   #sky
-        # if (self.model.bird.center_x - self.model.bird.radius >= self.model.user.center_x + self.model.user.radius)  and (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - self.model.user.radius):
-        #     print "Game Over"
-        #     time.sleep(2)
+
         pygame.draw.circle(self.screen, #'bird'
                            self.model.bird.color,
                            (self.model.bird.center_x, self.model.bird.center_y),
                            self.model.bird.radius)
+        self.ostrich = pygame.transform.scale(pygame.image.load('ostrich.png'), (self.model.bird.radius * 2, self.model.bird.radius * 2))
+        self.screen.blit(self.ostrich, (self.model.bird.center_x - self.model.bird.radius, self.model.bird.center_y - self.model.bird.radius))
+
 
         pygame.draw.circle(self.screen, #player
                            pygame.Color('white'),
                            (self.model.user.center_x, self.model.user.center_y),
                            self.model.user.radius)
+        self.screen.blit(self.eyes, (self.model.user.center_x -40, self.model.user.center_y-80))
         
-        if (self.model.bird.center_x + self.model.bird.radius >= self.model.user.center_x - self.model.user.radius -20 )  and \
+        if (self.model.bird.center_x + self.model.bird.radius >= self.model.user.center_x - self.model.user.radius)  and \
          (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - (self.model.user.radius -20)) and \
          (self.model.bird.center_x - self.model.bird.radius <= self.model.user.center_x + self.model.user.radius -20 )  and \
-         (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - (self.model.user.radius +20)):
-
-            # print self.model.bird.center_x + self.model.bird.radius >= self.model.user.center_x + self.model.user.radius
-            # print self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y + self.model.user.radius
-            self.screen.blit(self.image, (0,0))
+         (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - (self.model.user.radius -20)):
+            self.screen.blit(self.end, (0,0))
+            
             
 
         pygame.display.update()
+
 
 
 
@@ -79,18 +81,15 @@ class Bird(object):
     def update(self):
         """ Update the position of the ball due to time passing """
         self.radius += self.growth
+        
         if self.center_y < 500:
             self.center_y += 25
-            self.color = pygame.Color('yellow')
+            
         else:
-            time.sleep(2)
             self.center_y = 0
             self.radius = 10
             self.center_x = randint(0, 500) 
             self.color = pygame.Color('yellow')
-        if self.radius >= 40:
-            #ball changes to red when it gets realy close to the bottom of the screen
-            self.color = pygame.Color('red')
         
 
 
@@ -118,7 +117,7 @@ class Movement(object):
         '''uses the position of player's face to control the user'''
         for (x,y,w,h) in faces:
             self.model.user.center_x = 500-(2*x)
-            
+                
                 
 
 
@@ -126,12 +125,6 @@ class Movement(object):
 if __name__ == '__main__':
     pygame.init()
     size = (500, 500)
-    # MOVE = pygame.USEREVENT + 1
-    # move_event = pygame.event.Event(MOVE)
-    # pygame.time.set_timer(MOVE, 1)
-    # cap = cv2.VideoCapture(0)
-    # face_cascade = cv2.CascadeClassifier('/home/arianaolson/haarcascade_frontalface_alt.xml')
-    # kernel = np.ones((21,21), 'uint8')
 
     model = SkyModel(size[0], size[1])
     view = View(model, size)
