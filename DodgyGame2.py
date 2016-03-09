@@ -16,7 +16,7 @@ class SkyModel(object):
         self.RADIUS = 10
         self.bird = Bird(randint(1,500), self.BIRD_Y , self.RADIUS)
         self.user = User(self.USER_X, 500, 80)
-        self.gameover = GameOver()
+        
 
 
     def update(self):
@@ -59,6 +59,7 @@ class View(object):
          (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - (self.model.user.radius -20)) and \
          (self.model.bird.center_x - self.model.bird.radius <= self.model.user.center_x + self.model.user.radius -20 )  and \
          (self.model.bird.center_y + self.model.bird.radius >= self.model.user.center_y - (self.model.user.radius -20)):
+            #determining if a collision happened
             self.screen.blit(self.end, (0,0))
             
             
@@ -83,13 +84,15 @@ class Bird(object):
         self.radius += self.growth
         
         if self.center_y < 500:
+            #if the bird has not reached the bottom of the screen
             self.center_y += 25
             
         else:
+            #restart position at top of screen
             self.center_y = 0
             self.radius = 10
             self.center_x = randint(0, 500) 
-            self.color = pygame.Color('yellow')
+            
         
 
 
@@ -101,16 +104,14 @@ class User(object):
         self.center_y = center_y
         self.radius = radius
 
-class GameOver(object):
-    def __init__(self, color='red'):
-        self.color = pygame.Color(color)
+
 
 class Movement(object):
     def __init__(self, model):
         self.model = model
         self.MOVE = pygame.USEREVENT + 1
         move_event = pygame.event.Event(self.MOVE)
-        pygame.time.set_timer(self.MOVE, 1)
+        pygame.time.set_timer(self.MOVE, 1) #this event occurs every millisecond
         self.cap = cv2.VideoCapture(0)
         self.face_cascade = cv2.CascadeClassifier('/home/arianaolson/haarcascade_frontalface_alt.xml')
     def handle_event(self, event):
