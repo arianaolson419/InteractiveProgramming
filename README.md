@@ -1,2 +1,2 @@
-# InteractiveProgramming
-This is the base repo for the interactive programming project for Software Design, Spring 2016 at Olin College.
+# InteractiveProgramming2
+Improving and adding new features to Mini Project 4 for Mini Project 5
