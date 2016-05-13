@@ -62,6 +62,7 @@ class View(object):
         
         self.screen.blit(label, (text_pos[0], text_pos[1]))
         pygame.display.update()
+   
     def draw(self):
         """ Draw the active game to the pygame window """
         self.screen.fill(pygame.Color(135, 206, 250))  # sky
